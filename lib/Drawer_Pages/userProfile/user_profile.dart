@@ -22,7 +22,7 @@ class _UserProfileState extends State<UserProfile> {
 
   BannerAd createBannerAd() {
     return BannerAd(
-        adUnitId: BannerAd.testAdUnitId,
+        adUnitId: 'ca-app-pub-2352422574824794/2667820004',
         size: AdSize.banner,
         targetingInfo: targetingInfo,
         listener: (MobileAdEvent event) {
@@ -42,7 +42,8 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   void initState() {
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance
+        .initialize(appId: 'ca-app-pub-2352422574824794~3350346287');
     _bannerAd = createBannerAd()
       ..load()
       ..show();
