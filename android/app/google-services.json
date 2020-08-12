@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "854377479115",
+    "firebase_url": "https://sharecipe-a3717.firebaseio.com",
+    "project_id": "sharecipe-a3717",
+    "storage_bucket": "sharecipe-a3717.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854377479115:android:899f5dc9999fc179fb944e",
+        "android_client_info": {
+          "package_name": "com.DipeshMohanty.sharecipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854377479115-99un9dlumpuolm2sbn6jc1j252p4k35a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.DipeshMohanty.sharecipe",
+            "certificate_hash": "5ebd4b80230c6814fc938c93ed1f14dab967298c"
+          }
+        },
+        {
+          "client_id": "854377479115-ipi0uknet0omc3s09gbd1nnbnrtctaus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUDGErSDg0U-1hffDw6ZcjeJQCSIfm85c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854377479115-ipi0uknet0omc3s09gbd1nnbnrtctaus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
