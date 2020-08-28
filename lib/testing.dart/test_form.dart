@@ -430,7 +430,8 @@ class _RecipeFormBodyTestState extends State<RecipeFormBodyTest> {
                                                     steps,
                                                     recipeName
                                                         .substring(0, 1)
-                                                        .toUpperCase());
+                                                        .toUpperCase(),
+                                                    'false');
                                             DatabaseService(uid: widget.uid)
                                                 .updateRecipeCount(
                                                     userdata.recipes);

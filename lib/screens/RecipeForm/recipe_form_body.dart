@@ -24,6 +24,7 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
   String quantity = '';
   int ingCount = 0;
   int stepCount = 0;
+  bool private = false;
   String _unitText = 'Grams';
   final ingHolder = TextEditingController();
   final stepHolder = TextEditingController();
@@ -176,6 +177,7 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                           color: Colors.black,
                           fontSize: 20.0),
                     ),
+                    SizedBox(height: 20.0),
                     Text(
                       ingredients,
                       style: TextStyle(color: Colors.black, fontSize: 20.0),
@@ -306,6 +308,7 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                           color: Colors.black,
                           fontSize: 20.0),
                     ),
+                    SizedBox(height: 20.0),
                     Text(
                       steps,
                       style: TextStyle(color: Colors.black, fontSize: 20.0),
@@ -370,8 +373,21 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                       },
                     ),
                     SizedBox(
-                      height: 10.0,
+                      height: 20.0,
                     ),
+                    CheckboxListTile(
+                        value: private,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(
+                          'Private Recipe? Only you can view this recipe.',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            private = true;
+                          });
+                        }),
+                    SizedBox(height: 25.0),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50.0,
@@ -430,7 +446,8 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                                                     steps,
                                                     recipeName
                                                         .substring(0, 1)
-                                                        .toUpperCase());
+                                                        .toUpperCase(),
+                                                    private.toString());
                                             DatabaseService(uid: widget.uid)
                                                 .updateRecipeCount(
                                                     userdata.recipes);

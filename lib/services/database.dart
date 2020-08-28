@@ -52,7 +52,8 @@ class DatabaseService {
       int cookingTime,
       String ingredients,
       String steps,
-      String searchKey) async {
+      String searchKey,
+      String private) async {
     return await recipeCollection.document(recipeName).setData({
       'uid': uid,
       'authorName': authorName,
@@ -62,6 +63,7 @@ class DatabaseService {
       'ingredients': ingredients,
       'steps': steps,
       'searchKey': searchKey,
+      'private': private,
     });
   }
 
@@ -92,14 +94,17 @@ class DatabaseService {
           recipePreptime: doc.data['recipePreptime'],
           cookingTime: doc.data['cookingTime'],
           ingredients: doc.data['ingredients'],
-          steps: doc.data['steps']);
-      searchKey:
-      doc.data['searchKey'];
+          steps: doc.data['steps'],
+          searchKey: doc.data['searchKey'],
+          private: doc.data['private']);
     }).toList();
   }
 
   Stream<List<Recipes>> get recipes {
-    return recipeCollection.snapshots().map(_recipeListfromSnapshot);
+    return recipeCollection
+        .where('private', isEqualTo: 'false')
+        .snapshots()
+        .map(_recipeListfromSnapshot);
   }
 
   //Stream for user recipes
