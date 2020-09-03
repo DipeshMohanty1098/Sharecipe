@@ -133,7 +133,7 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                         autocorrect: true,
                         //keyboardType: TextInputType.multiline,
                         //maxLines: null,
-                        maxLength: 15,
+                        maxLength: null,
                         decoration:
                             InputDecoration(hintText: 'Enter Recipe Name'),
                         validator: (val) =>
@@ -272,6 +272,8 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                           quantityHolder.clear();
                           print(ingredientList);
                           previewIng(ingredientList);
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
                           Toast.show(
                             "Ingredient added.",
                             context,
@@ -348,6 +350,8 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                           stepHolder.clear();
                           print(stepsList);
                           previewStep(stepsList);
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
                           Toast.show("Step added.", context,
                               duration: Toast.LENGTH_LONG,
                               gravity: Toast.BOTTOM,

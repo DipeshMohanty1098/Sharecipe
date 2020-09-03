@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sharecipe/screens/Confirmation.dart';
-import 'package:sharecipe/screens/HomePage.dart';
 import 'package:sharecipe/screens/Wrapper.dart';
-import 'package:sharecipe/screens/auth/signinOnlygoogle.dart';
 import 'package:sharecipe/services/auth.dart';
 import 'package:sharecipe/testing.dart/search.dart';
 import 'package:sharecipe/testing.dart/search_test.dart';
 import 'package:sharecipe/testing.dart/test.dart';
-
+import 'dart:io';
 import 'models/user.dart';
 
 void main() => runApp(
