@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sharecipe/ViewSocial/ViewProfile.dart';
+import 'package:sharecipe/ViewSocial/ViewRecipeList.dart';
 import 'package:sharecipe/models/recipe.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:sharecipe/models/ads.dart';
@@ -24,6 +26,11 @@ class _TopNavState extends State<TopNav> {
     return recipeName.substring(0, i);
   }
 
+  String FirstName(String name){
+    return name.substring(0,name.indexOf(' '));
+
+  }
+
   BannerAd _bannerAd;
 
   BannerAd createBannerAd() {
@@ -34,6 +41,10 @@ class _TopNavState extends State<TopNav> {
         listener: (MobileAdEvent event) {
           print("BannerAd $event");
         });
+  }
+
+  String UIDgetter(String recipeName){
+    return recipeName.substring(recipeName.indexOf(".")+1, recipeName.length);
   }
 
   void dispose() {
@@ -94,6 +105,40 @@ class _TopNavState extends State<TopNav> {
               height: 10.0,
             ),
             Text("${widget.recipe.authorName}", style: TextStyle(fontSize: 25)),
+            SizedBox(height: 20.0,),
+            Container(
+              height: 50,
+              child: FlatButton(
+                color: Colors.grey,
+                child: Text("View " + FirstName(widget.recipe.authorName) + "'s" + " profile", style: TextStyle(fontSize: 18) ),
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ViewUserProfile(uid: UIDgetter(widget.recipe.recipeName), authorName: widget.recipe.authorName,)));
+                            print((widget.recipe.uid));
+                            print(widget.recipe.authorName);
+                },
+              ),
+            ),
+            SizedBox(height: 20.0,),
+            Container(
+              height: 50,
+              child: FlatButton(
+                color: Colors.grey,
+                child: Text("View " + FirstName(widget.recipe.authorName) + "'s" + " other recipes", style: TextStyle(fontSize: 18) ),
+                onPressed: (){
+                  print((widget.recipe.uid));
+                            print(widget.recipe.authorName);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            UserRecipesSocial(uid: UIDgetter(widget.recipe.recipeName))));
+                },
+              ),
+            )
           ],
         ),
       ),

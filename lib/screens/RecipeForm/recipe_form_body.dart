@@ -20,11 +20,12 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
   String ingredient = '';
   String ingredients = '';
   String step = '';
+  bool _newVal = true;
   String steps = '';
   String quantity = '';
   int ingCount = 0;
   int stepCount = 0;
-  bool private = false;
+  bool _private = false;
   String _unitText = 'Grams';
   final ingHolder = TextEditingController();
   final stepHolder = TextEditingController();
@@ -379,18 +380,24 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    CheckboxListTile(
-                        value: private,
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(
-                          'Private Recipe? Only you can view this recipe.',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            private = true;
-                          });
-                        }),
+                    Row(
+                      children: [
+                        Switch(
+                            value: _private,
+                            onChanged: (newVal) {
+                              setState(() {
+                                _private = newVal;
+                                print(_private);
+                              });
+                            }),
+                            Expanded(
+                                                          child: Text(
+                                'Private Recipe? Only you can view this recipe.',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                      ],
+                    ),
                     SizedBox(height: 25.0),
                     Container(
                       width: MediaQuery.of(context).size.width,
@@ -451,7 +458,7 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
                                                     recipeName
                                                         .substring(0, 1)
                                                         .toUpperCase(),
-                                                    private.toString());
+                                                    _private.toString());
                                             DatabaseService(uid: widget.uid)
                                                 .updateRecipeCount(
                                                     userdata.recipes);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sharecipe/ViewRecipeNew/ViewRecipe.dart';
 import 'package:sharecipe/models/UserData.dart';
 import 'package:sharecipe/models/recipe.dart';
 import 'package:sharecipe/models/users.dart';
@@ -101,7 +102,7 @@ class UserRecipeTile extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ViewRecipe(recipe: userRecipe)));
+                              TopNav(recipe: userRecipe)));
                 },
               ),
             ]),

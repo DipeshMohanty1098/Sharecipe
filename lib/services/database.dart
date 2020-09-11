@@ -79,9 +79,24 @@ class DatabaseService {
         photoURL: snapshot.data['photoURL']);
   }
 
+  //get User Data When someone else views your profile
+  Future<DocumentSnapshot> getData() async{
+    print(uid);
+    DocumentSnapshot doc = await Firestore.instance.collection("Users").document(uid).get();
+    return doc;
+  }
+
+  //get recipe list of user when someone else views the list
+
+  
+
+
   Stream<UserData> get userdata {
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
-    //print(userCollection.document(uid).snapshots().map(_userDataFromSnapshot));
+  }
+
+  Stream<List<Recipes>> get socialRecipes {
+    return recipeCollection.where('uid', isEqualTo: uid).where('private', isEqualTo: 'false').snapshots().map(_recipeListfromSnapshot);
   }
 
   //recipelist from snapshot
