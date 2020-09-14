@@ -5,11 +5,13 @@ import 'package:sharecipe/models/user.dart';
 import 'package:sharecipe/models/users.dart';
 import 'package:sharecipe/screens/HomePageBody.dart';
 import 'package:sharecipe/screens/RecipeForm/recipe_form.dart';
+import 'package:sharecipe/services/PushNotifications.dart';
 import 'package:sharecipe/services/auth.dart';
 import 'package:sharecipe/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:sharecipe/testing.dart/search_test.dart';
-
+//import 'package:firebase_messaging/firebase_messaging.dart';
+ 
 class HomePage extends StatefulWidget {
   //bool anon;
   //HomePage({this.anon, this.uid});
@@ -19,13 +21,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  
   void printUID(uid) {
     print(uid);
   }
 
   @override
-  void iniState() {
+  void initState() {
     super.initState();
+   final fcm = PushNotificationService();
+    fcm.initialise();
   }
 
   final AuthService _auth = AuthService();

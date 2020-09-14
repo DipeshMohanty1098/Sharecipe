@@ -97,7 +97,7 @@ class _TopNavState extends State<TopNav> {
               style: TextStyle(fontSize: 25),
             ),
             SizedBox(
-              height: 100.0,
+              height: 30.0,
             ),
             Text("Recipe By:",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
@@ -107,7 +107,7 @@ class _TopNavState extends State<TopNav> {
             Text("${widget.recipe.authorName}", style: TextStyle(fontSize: 25)),
             SizedBox(height: 20.0,),
             Container(
-              height: 50,
+              height: 45,
               child: FlatButton(
                 color: Colors.grey,
                 child: Text("View " + FirstName(widget.recipe.authorName) + "'s" + " profile", style: TextStyle(fontSize: 18) ),
@@ -124,7 +124,7 @@ class _TopNavState extends State<TopNav> {
             ),
             SizedBox(height: 20.0,),
             Container(
-              height: 50,
+              height: 45,
               child: FlatButton(
                 color: Colors.grey,
                 child: Text("View " + FirstName(widget.recipe.authorName) + "'s" + " other recipes", style: TextStyle(fontSize: 18) ),
@@ -138,7 +138,8 @@ class _TopNavState extends State<TopNav> {
                             UserRecipesSocial(uid: UIDgetter(widget.recipe.recipeName))));
                 },
               ),
-            )
+            ),
+            SizedBox(height: 50)
           ],
         ),
       ),
