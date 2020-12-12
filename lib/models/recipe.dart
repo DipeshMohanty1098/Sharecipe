@@ -8,6 +8,7 @@ class Recipes {
   final String uid;
   final String searchKey;
   final String private;
+  final String created;
   Recipes(
       {this.recipeName,
       this.recipePreptime,
@@ -17,5 +18,6 @@ class Recipes {
       this.steps,
       this.uid,
       this.searchKey,
-      this.private});
+      this.private,
+      this.created});
 }

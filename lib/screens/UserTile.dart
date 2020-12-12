@@ -38,7 +38,7 @@ class UserTile extends StatelessWidget {
                   nameGetter(user.recipeName),
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text("By " + "${user.authorName}"),
+                subtitle: Text("By " + "${user.authorName}" + "\n" + "Published on " + "${user.created.substring(0,10)}"),
                 trailing: Text(
                   "Time to Cook" + "\n" + "   ${user.cookingTime}" + " Mins",
                   style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),

@@ -64,6 +64,7 @@ class DatabaseService {
       'steps': steps,
       'searchKey': searchKey,
       'private': private,
+      'created': Timestamp.now().toDate().toString(),
     });
   }
 
@@ -111,6 +112,7 @@ class DatabaseService {
           ingredients: doc.data['ingredients'],
           steps: doc.data['steps'],
           searchKey: doc.data['searchKey'],
+          created: doc.data['created'],
           private: doc.data['private']);
     }).toList();
   }

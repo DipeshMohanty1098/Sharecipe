@@ -35,6 +35,7 @@ class UserRecipeTileSocial extends StatelessWidget {
                   nameGetter(userRecipe.recipeName),
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                subtitle: Text("Published on " + "${userRecipe.created.substring(0,10)}"),
                 onTap: () {
                   Navigator.push(
                       context,

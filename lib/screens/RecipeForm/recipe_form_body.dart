@@ -39,6 +39,13 @@ class _RecipeFormBodyTest extends State<RecipeFormBody> {
     'Tbsp',
     'Pieces'
   ];
+  List<TextFormField> formFields = [TextFormField(
+                        autocorrect: true,
+                        keyboardType: TextInputType.text,
+                        //maxLength: 500,
+                        maxLines: null,
+                        decoration: InputDecoration(hintText: 'Add a step'),
+  )];
   List<String> stepsList = [];
   List<String> ingredientList = [];
   String previewIng(List ingredientLists) {
