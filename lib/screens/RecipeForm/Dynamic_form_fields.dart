@@ -2,10 +2,14 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:sharecipe/models/UserData.dart';
 import 'package:sharecipe/shared/AlertBox.dart';
-import 'package:sharecipe/testing.dart/Recipe%20Form/PreviewRecipe.dart';
+import 'package:sharecipe/screens/RecipeForm/PreviewRecipe.dart';
 
 class DynamicFormFields extends StatefulWidget {
+  String uid;
+  DynamicFormFields({this.uid});
   @override
   _DynamicFormFieldsState createState() => _DynamicFormFieldsState();
 }
@@ -13,10 +17,6 @@ class DynamicFormFields extends StatefulWidget {
 class _DynamicFormFieldsState extends State<DynamicFormFields> {
 
   void addField(){ 
-    //if (steps[steps.length - 1] == ''){
-      //_showAlert();
-    //}
-    //else{
     _stepsCounter += 1;
     steps.add('');
     int label = _stepsCounter;
@@ -49,10 +49,10 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
       steps = steps;
     });
     print(steps);
-    //}
   }
 
   void removeField(){
+    if (formFields.length > 1){
     _stepsCounter -= 1;
     steps.remove(steps[formFields.length-1]);
     formFields.remove(formFields[formFields.length-1]);
@@ -60,14 +60,11 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
       formFields = formFields;
       steps = steps;
     });
+    }
     print(steps);
   }
 
    void addIngredientField(){ 
-   // if (ingredients[ingredients.length-1] == '' || quantity[quantity.length-1] == ''){
-    //  _showAlert();
-    //}
-   // else{
     _ingredientCounter += 1;
     ingredients.add('');
     quantity.add('');
@@ -154,11 +151,10 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
     print(ingredients);
     print(quantity);
     print(units);
-    //}
   }
 
   void removeIngredientField(){
-    
+    if (formFieldsIng.length > 1){
     _ingredientCounter -= 1;
     ingredients.remove(ingredients[formFieldsIng.length-1]);
     quantity.remove(quantity[formFieldsIng.length-1]);
@@ -169,6 +165,7 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
       quantity = quantity;
       units = units;
     });
+    }
     print(ingredients);
     print(quantity);
     print(units);
@@ -285,18 +282,12 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
 
   @override
   Widget build(BuildContext context) {
+    final userdata = Provider.of<UserData>(context);
     return WillPopScope(
       onWillPop: (){
         Alert().showAlert(context);
       },
-          child: Scaffold(
-        appBar: AppBar(
-          title: Text("Add a new Recipe", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),),
-          centerTitle: true,
-          elevation: 7,
-          backgroundColor: Colors.white,
-        ),
-        body: SingleChildScrollView(
+          child: SingleChildScrollView(
                 child: Form(
               key: _formKey,
               child: Column(
@@ -359,7 +350,7 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Column(children: formFieldsIng,) 
                   ),
-                  FlatButton(onPressed: () => addIngredientField(),  
+                 FlatButton(onPressed: () => addIngredientField(),  
       child: Text("+ Add an Ingredient", style: TextStyle(color: Colors.blue)),
       ),
       FlatButton(onPressed: () => removeIngredientField(),  
@@ -376,7 +367,7 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
       FlatButton(onPressed: () => removeField(),  
       child: Text("Remove Last Step", style: TextStyle(color: Colors.blue)),
       ),
-      SizedBox(height: 25,),
+      SizedBox(height: 10,),
       Row(
                       children: [
                         Switch(
@@ -420,6 +411,10 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
             recipePrepTime: recipePreptime,
             quantity: quantity,
             units: units,
+            authorName: userdata.name,
+            private: _private,
+            recipes: userdata.recipes,
+            uid: widget.uid,
           )
           )
           );
@@ -432,7 +427,6 @@ class _DynamicFormFieldsState extends State<DynamicFormFields> {
               )
           ),
         ),
-      ),
     );
   }
 }

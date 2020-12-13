@@ -4,6 +4,8 @@ import 'package:sharecipe/models/UserData.dart';
 import 'package:sharecipe/models/user.dart';
 import 'package:sharecipe/screens/RecipeForm/recipe_form_body.dart';
 import 'package:sharecipe/services/database.dart';
+import 'package:sharecipe/screens/RecipeForm/Dynamic_form_fields.dart';
+import 'package:sharecipe/testing.dart/SQFLite_localDB/form.dart';
 import 'package:sharecipe/testing.dart/test_form.dart';
 
 class RecipeForm extends StatefulWidget {
@@ -29,7 +31,7 @@ class _RecipeFormState extends State<RecipeForm> {
           centerTitle: true,
           backgroundColor: Colors.white,
         ),
-        body: RecipeFormBody(uid: user.uid),
+        body: DraftForm(uid: user.uid),
       ),
     );
   }

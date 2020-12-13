@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sharecipe/screens/HomePage.dart';
 import 'package:sharecipe/screens/RecipeForm/recipe_form.dart';
-import 'package:sharecipe/testing.dart/Recipe%20Form/Dynamic_form_fields.dart';
+import 'package:sharecipe/screens/RecipeForm/Dynamic_form_fields.dart';
 
 class HomePageBN extends StatefulWidget {
   @override
@@ -20,7 +20,7 @@ class _HomePageBNState extends State<HomePageBN> {
         title: Text('Publish Recipe')),
   ];
 
-  final bodyList = [HomePage(), DynamicFormFields()];
+  final bodyList = [HomePage(), RecipeForm()];
   int currentIndex = 0;
   void onTap(int index) {
     setState(() {
