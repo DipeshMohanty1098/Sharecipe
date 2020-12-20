@@ -5,7 +5,7 @@ import 'package:sharecipe/models/user.dart';
 import 'package:sharecipe/screens/RecipeForm/recipe_form_body.dart';
 import 'package:sharecipe/services/database.dart';
 import 'package:sharecipe/screens/RecipeForm/Dynamic_form_fields.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/form.dart';
+import 'package:sharecipe/screens/RecipeForm/form.dart';
 import 'package:sharecipe/testing.dart/test_form.dart';
 
 class RecipeForm extends StatefulWidget {
@@ -23,6 +23,7 @@ class _RecipeFormState extends State<RecipeForm> {
       value: DatabaseService(uid: user.uid).userdata,
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: new IconThemeData(color: Colors.black),
           elevation: 7,
           title: Text(
             "Publish a Recipe",

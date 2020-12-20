@@ -19,7 +19,7 @@ class _UserRecipesState extends State<UserRecipes> {
         value: DatabaseService(uid: user.uid).userRecipes,
         child: Scaffold(
           appBar: AppBar(
-            //iconTheme: new IconThemeData(color: Colors.black),
+            iconTheme: new IconThemeData(color: Colors.black),
             elevation: 7,
             title: Text(
               "Your Recipes",

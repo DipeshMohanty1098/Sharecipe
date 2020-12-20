@@ -83,4 +83,9 @@ class LocalDatabaseService{
     return await db.delete(_tableName, where: '$columnID = ?', whereArgs: [id]);
   }
 
+  Future<int> autoDelete(String name) async{
+    Database db = await instance.database;
+    return await db.delete(_tableName, where: '$recipeName = ?', whereArgs: [name]);
+  }
+
 }

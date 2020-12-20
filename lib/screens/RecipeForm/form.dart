@@ -7,33 +7,24 @@ import 'package:provider/provider.dart';
 import 'package:sharecipe/models/UserData.dart';
 import 'package:sharecipe/shared/AlertBox.dart';
 import 'package:sharecipe/screens/RecipeForm/PreviewRecipe.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/drafts.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/localDB_helper.dart';
+import 'package:sharecipe/Drawer_Pages/user_drafts/drafts.dart';
+import 'package:sharecipe/services/localDB_helper.dart';
+import 'package:toast/toast.dart';
 
-class EditDraftForm extends StatefulWidget {
+class DraftForm extends StatefulWidget {
   String uid;
-  int id;
-  String authorName;
-  int recipeCount;
-  String recipeName;
-  int recipePrepTime;
-  int cookingTime;
-  String ingredients;
-  String quantity;
-  String units;
-  String steps;
-  String private;
-  EditDraftForm({this.authorName,this.cookingTime,
-  this.ingredients,this.private,this.quantity,
-  this.recipeCount,this.recipeName,this.recipePrepTime,
-  this.steps,this.uid,this.units,this.id});
+  DraftForm({this.uid});
   @override
-  _EditDraftFormState createState() => _EditDraftFormState();
+  _DraftFormState createState() => _DraftFormState();
 }
 
-class _EditDraftFormState extends State<EditDraftForm> {
+class _DraftFormState extends State<DraftForm> {
 
   void joinAll(){
+    joinSteps = '';
+    joinIng = '';
+    joinQuant = '';
+    joinUnit = '';
     for (String i in steps){
       joinSteps += i + '\n';
     }
@@ -44,7 +35,22 @@ class _EditDraftFormState extends State<EditDraftForm> {
     }
   }
 
-
+  void saveRecipeToDB(String name, String uid, int recipeCount){
+    joinAll();
+    LocalDatabaseService.instance.insert({
+        LocalDatabaseService.uid : uid,
+        LocalDatabaseService.authorName : name,
+        LocalDatabaseService.cookingTime : cookingTime,
+        LocalDatabaseService.recipePrepTime : recipePreptime,
+        LocalDatabaseService.recipeCount : recipeCount,
+        LocalDatabaseService.steps : joinSteps,
+        LocalDatabaseService.ingredients : joinIng,
+        LocalDatabaseService.quantity : joinQuant,
+        LocalDatabaseService.units : joinUnit,
+        LocalDatabaseService.private: _private.toString(),
+        LocalDatabaseService.recipeName: recipeName,
+    });
+  }
 
   void updateRecipe(String name) async{
     joinAll();
@@ -57,7 +63,8 @@ class _EditDraftFormState extends State<EditDraftForm> {
         LocalDatabaseService.units : joinUnit,
         LocalDatabaseService.private: _private.toString(),
         LocalDatabaseService.recipeName: recipeName,
-    }, name);
+    },name);
+    print(updated);
   }
 
   void addField(){ 
@@ -226,143 +233,10 @@ class _EditDraftFormState extends State<EditDraftForm> {
     print(units);
   }
 
-  void getArrays(){
-    steps = widget.steps.split("\n");
-    steps.removeLast();
-    ingredients = widget.ingredients.split("\n");
-    ingredients.removeLast();
-    quantity = widget.quantity.split("\n");
-    quantity.removeLast();
-    units = widget.units.split("\n");
-    units.removeLast();
-  }
-
-  void autoFillSteps() async{
-    for (int i = 1; i< steps.length;i++){
-      _stepsCounter += 1;
-      int label = _stepsCounter;
-      formFields.add(
-        TextFormField(
-      decoration: InputDecoration(hintText: 'Enter Step ' + '${(_stepsCounter).toString()}.',
-      ),
-      validator: (val){
-        if (val == ''){
-          return 'Please do not leave this field empty';
-        }
-      },
-      initialValue: steps[i],
-      autocorrect: true,
-      onTap: () {
-          setState(() {
-            _changeNumber = label;
-          });
-        print(_changeNumber);
-      },
-      onChanged: (val){
-        setState(() {
-          steps[i] = val;
-          print(steps);
-        });
-        
-      }, 
-    ),
-      );
-      setState(() {
-        formFields = formFields;
-      });
-    }
-  }
-
-  void autoFillIngs() async{
-    for (int i=1;i< ingredients.length; i++){
-      _ingredientCounter += 1;
-      int label = _ingredientCounter;
-      formFieldsIng.add(Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 100.0,
-                          child: TextFormField(
-                            initialValue: ingredients[i],
-                              //keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              decoration:
-                                  InputDecoration(hintText: 'Ingredient'),
-                              validator: (val) {
-                                if (val == ''){
-                                  return 'Please do not leave this field empty';
-                                }
-                              },
-                              autocorrect: true,
-                              onTap: () {
-                                setState(() {
-                                  _changeIng = label;
-                                });
-                              },
-                              onChanged: (val) {
-                                setState(() {
-                                  ingredients[i] = val;
-                                  print(ingredients);
-                                  print(units);
-                                  print(quantity);
-                                });
-                              }),
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Container(
-                          width: 75,
-                          child: TextFormField(
-                            initialValue: quantity[i],
-                              keyboardType: TextInputType.number,
-                              //maxLines: null,
-                              decoration: InputDecoration(hintText: 'Quantity'),
-                              validator: (val) {
-                                if (val == ''){
-                                  return 'Please add a quantity for the ingredient';
-                                };
-                              },
-                              autocorrect: true,
-                              onChanged: (val) {
-                                setState(() {
-                                  quantity[i] = val;
-                                });
-                              }),
-                        ),
-                        SizedBox(width: 5),
-                        Container(
-                          width: 75,
-                          child: DropdownButtonFormField(
-                              decoration: InputDecoration(hintText: 'Unit'),
-                              value: units[_ingredientCounter-1],
-                              hint: Text('Units'),
-                              items: _units.map((_) {
-                                return DropdownMenuItem(
-                                  value: _,
-                                  child: Text('$_'),
-                                );
-                              }).toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  units[i] = val;
-                                });
-                              }),
-                        ),
-                      ],
-                    ),);
-                    setState(() {
-                      formFieldsIng = formFieldsIng;
-                      ingredients = ingredients;
-                      quantity = quantity;
-                      units = units;
-                    });
-    }
-  }
-
   String Capitalize(String name) {
     return name.substring(0, 1).toUpperCase() + name.substring(1, name.length);
   }
+
 
   String saveRecipeName = '';
   bool isSaved = true;
@@ -385,6 +259,8 @@ class _EditDraftFormState extends State<EditDraftForm> {
   String recipeName = '';
   String recipePreptime = '';
   String cookingTime = '';
+  final stepController = TextEditingController();
+  List<TextEditingController> controllers = [TextEditingController()];
   final List<String> _units = [
     'Grams',
     'Kgs',
@@ -400,13 +276,7 @@ class _EditDraftFormState extends State<EditDraftForm> {
   @override
   void initState(){
     super.initState();
-    getArrays();
-    recipeName = widget.recipeName;
-    recipePreptime = widget.recipePrepTime.toString();
-    cookingTime = widget.cookingTime.toString();
-    formFields.add(
-      TextFormField(
-        initialValue: steps[0],
+    formFields.add(TextFormField(
       decoration: InputDecoration(hintText: 'Enter Step ' + '${(_stepsCounter).toString()}.' ),
       onChanged: (val){
         setState(() {
@@ -414,8 +284,7 @@ class _EditDraftFormState extends State<EditDraftForm> {
         });
       }
     ));
-    formFieldsIng.add(
-      Row(
+    formFieldsIng.add(Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
@@ -429,7 +298,6 @@ class _EditDraftFormState extends State<EditDraftForm> {
                               validator: (val) {
                                 val.isEmpty ? 'Please do not leave this field empty.': null;
                               },
-                              initialValue: ingredients[0],
                               onChanged: (val) {
                                 setState(() {
                                   ingredients[0] = val;
@@ -444,7 +312,6 @@ class _EditDraftFormState extends State<EditDraftForm> {
                         Container(
                           width: 75,
                           child: TextFormField(
-                            initialValue: quantity[0],
                               keyboardType: TextInputType.number,
                               //maxLines: null,
                               decoration: InputDecoration(hintText: 'Quantity'),
@@ -478,101 +345,91 @@ class _EditDraftFormState extends State<EditDraftForm> {
                               }),
                         ),
                       ],
-                    ),
-    );
-    autoFillSteps();
-    autoFillIngs();
-    print("steps: " + "$steps");
-    print("ff:" + "$formFields");
-    print(formFieldsIng);
+                    ),);
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
-   // final userdata = Provider.of<UserData>(context);
+    final userdata = Provider.of<UserData>(context);
     return WillPopScope(
       onWillPop: (){
-        Alert().showAlertforEditDraft(context);
+        Alert().showAlert(context);
       },
-          child: Scaffold(
-                body: SingleChildScrollView(
-                                  child: Form(
+          child: SingleChildScrollView(
+                child: Form(
               key: _formKey,
               child: Column(
-                  
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 30,),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
-                                      child: TextFormField(
-                              autocorrect: true,
-                              //keyboardType: TextInputType.multiline,
-                              //maxLines: null,
-                              initialValue: recipeName,
-                              maxLength: null,
-                              decoration:
-                                  InputDecoration(hintText: 'Enter Recipe Name'),
-                              validator: (val) =>
-                                  val.isEmpty ? 'Please Enter a Recipe Name' : null,
-                              onChanged: (val) {
-                                setState(() {
-                                  recipeName = (val);
-                                });
-                              }),
-                    ),
-                    SizedBox(height: 20.0),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal:30),
-                                              child: TextFormField(
-                              autocorrect: true,
-                              initialValue: recipePreptime,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  hintText: 'Enter the Preparation time(minutes)'),
-                              validator: (val) =>
-                                  val.isEmpty ? 'Please fill this field' : null,
-                              onChanged: (val) {
-                                setState(() {
-                                  recipePreptime = val;
-                                });
-                              }),
-                        ),
-                        SizedBox(height: 20.0),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                                              child: TextFormField(
-                              autocorrect: true,
-                              keyboardType: TextInputType.number,
-                              initialValue: cookingTime,
-                              decoration: InputDecoration(
-                                  hintText: 'Enter the Cooking time(minutes)'),
-                              validator: (val) =>
-                                  val.isEmpty ? 'Please fill this field' : null,
-                              onChanged: (val) {
-                                setState(() {
-                                  cookingTime = val;
-                                });
-                              }),
-                        ),
-                    SizedBox(height: 20.0,),   
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Column(children: formFieldsIng,) 
-                    ),
-                   FlatButton(onPressed: () => addIngredientField(),  
+                
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 30,),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                                    child: TextFormField(
+                            autocorrect: true,
+                            //keyboardType: TextInputType.multiline,
+                            //maxLines: null,
+                            maxLength: null,
+                            decoration:
+                                InputDecoration(hintText: 'Enter Recipe Name'),
+                            validator: (val) =>
+                                val.isEmpty ? 'Please Enter a Recipe Name' : null,
+                            onChanged: (val) {
+                              setState(() {
+                                recipeName = (val);
+                              });
+                            }),
+                  ),
+                  SizedBox(height: 20.0),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal:30),
+                                            child: TextFormField(
+                            autocorrect: true,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                hintText: 'Enter the Preparation time(minutes)'),
+                            validator: (val) =>
+                                val.isEmpty ? 'Please fill this field' : null,
+                            onChanged: (val) {
+                              setState(() {
+                                recipePreptime = val;
+                              });
+                            }),
+                      ),
+                      SizedBox(height: 20.0),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                                            child: TextFormField(
+                            autocorrect: true,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                hintText: 'Enter the Cooking time(minutes)'),
+                            validator: (val) =>
+                                val.isEmpty ? 'Please fill this field' : null,
+                            onChanged: (val) {
+                              setState(() {
+                                cookingTime = val;
+                              });
+                            }),
+                      ),
+                  SizedBox(height: 20.0,),   
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Column(children: formFieldsIng,) 
+                  ),
+                 FlatButton(onPressed: () => addIngredientField(),  
       child: Text("+ Add an Ingredient", style: TextStyle(color: Colors.blue)),
       ),
       FlatButton(onPressed: () => removeIngredientField(),  
       child: Text("Remove Last Ingredient", style: TextStyle(color: Colors.blue)),
       ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30.0),
-                      child: Column(children: formFields,) 
-                    ),
-                    SizedBox(height:10.0),
-                    FlatButton(onPressed: () => addField(),  
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(children: formFields,) 
+                  ),
+                  SizedBox(height:10.0),
+                  FlatButton(onPressed: () => addField(),  
       child: Text("+ Add a Step", style: TextStyle(color: Colors.blue)),
       ),
       FlatButton(onPressed: () => removeField(),  
@@ -580,35 +437,92 @@ class _EditDraftFormState extends State<EditDraftForm> {
       ),
       SizedBox(height: 10,),
       Row(
-                        children: [
-                          Switch(
-                              value: _private,
-                              onChanged: (newVal) {
-                                setState(() {
-                                  _private = newVal;
-                                  print(_private);
-                                });
-                              }),
-                              Expanded(
-                                                            child: Text(
-                                  'Private Recipe? Only you can view this recipe.',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                      children: [
+                        Switch(
+                            value: _private,
+                            onChanged: (newVal) {
+                              setState(() {
+                                _private = newVal;
+                                print(_private);
+                              });
+                            }),
+                            Expanded(
+                                                          child: Text(
+                                'Private Recipe? Only you can view this recipe.',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                        ],
-                      ),
-      Container(
+                            ),
+                      ],
+                    ),
+      /*
+      isSaved ? Container(
+        width: 300,
+            child: FlatButton(child: Text("Save Recipe as a draft?", style: TextStyle(color: Colors.black, fontSize: 15),),
+        color: Colors.grey,
+        onPressed: () async{
+          if (_formKey.currentState.validate()){
+          saveRecipeName = recipeName;
+          saveRecipeToDB(userdata.name, widget.uid, userdata.recipes);
+          Toast.show( "Recipe added to drafts.", context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+            backgroundColor: Colors.grey);
+          setState(() {
+            isSaved = false;
+          });
+          }
+        },),
+       ) : Container(
         child: FlatButton(child: Text("Save your changes", style: TextStyle(color: Colors.black, fontSize: 15),),
         color: Colors.grey,
         onPressed: () async{
           if (_formKey.currentState.validate()){
           updateRecipe(saveRecipeName);
           saveRecipeName = recipeName;
-          Navigator.push(context, MaterialPageRoute(
-          builder: (context) => Drafts()));
+          Toast.show( "Changes Saved.", context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+            backgroundColor: Colors.grey);
           }
         },)
       ),
+      */
+      AnimatedCrossFade(firstChild: Container(
+        width: 300,
+            child: FlatButton(child: Text("Save Recipe as a draft?", style: TextStyle(color: Colors.black, fontSize: 15),),
+        color: Colors.grey,
+        onPressed: () async{
+          if (_formKey.currentState.validate()){
+          saveRecipeName = recipeName;
+          saveRecipeToDB(userdata.name, widget.uid, userdata.recipes);
+          Toast.show( "Recipe added to drafts.", context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+            backgroundColor: Colors.grey);
+          setState(() {
+            isSaved = false;
+          });
+          }
+        },),
+       ), 
+      secondChild: Container(
+        width: 300,
+        child: FlatButton(child: Text("Save your changes", style: TextStyle(color: Colors.black, fontSize: 15),),
+        color: Colors.grey,
+        onPressed: () async{
+          if (_formKey.currentState.validate()){
+          updateRecipe(saveRecipeName);
+          saveRecipeName = recipeName;
+          Toast.show( "Changes Saved.", context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+            backgroundColor: Colors.grey);
+          }
+        },)
+      ), 
+      crossFadeState: isSaved? CrossFadeState.showFirst: 
+      CrossFadeState.showSecond, 
+      duration: const Duration(milliseconds: 2000)),
       SizedBox(height: 20,),
       Container(
         width: 300,
@@ -617,6 +531,8 @@ class _EditDraftFormState extends State<EditDraftForm> {
         onPressed: (){
            if (_formKey.currentState.validate()) {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
+              updateRecipe(saveRecipeName);
+              saveRecipeName = recipeName;
           Navigator.push(context, MaterialPageRoute(
           builder: (context) =>PreviewRecipe(
             steps: steps,
@@ -626,9 +542,9 @@ class _EditDraftFormState extends State<EditDraftForm> {
             recipePrepTime: recipePreptime,
             quantity: quantity,
             units: units,
-            authorName: widget.authorName,
+            authorName: userdata.name,
             private: _private,
-            recipes: widget.recipeCount,
+            recipes: userdata.recipes,
             uid: widget.uid,
           )
           )
@@ -638,10 +554,9 @@ class _EditDraftFormState extends State<EditDraftForm> {
       ),
       SizedBox(height:25)
       
-                  ]
+                ]
               )
           ),
-                ),
         ),
     );
   }

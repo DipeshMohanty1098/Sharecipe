@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sharecipe/screens/Confirmation.dart';
 import 'package:sharecipe/services/database.dart';
+import 'package:sharecipe/services/localDB_helper.dart';
 
 
 class PreviewRecipe extends StatefulWidget {
@@ -166,7 +167,7 @@ class _PreviewRecipeState extends State<PreviewRecipe> {
                                         children: <Widget>[
                                           Text(
                                               'Are you sure you want to publish your recipe?'),
-                                          Text('It cannot be edited later.'),
+                                          Text('It cannot be edited later. This recipe will be automatically be removed from your drafts.'),
                                         ],
                                       ),
                                     ),
@@ -205,6 +206,9 @@ class _PreviewRecipeState extends State<PreviewRecipe> {
                                             DatabaseService(uid: widget.uid)
                                                 .updateRecipeCount(
                                                     widget.recipes);
+                                            int rows = await LocalDatabaseService.instance.autoDelete(widget.recipeName);
+                                            print(rows);
+                                            print(widget.recipeName);
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

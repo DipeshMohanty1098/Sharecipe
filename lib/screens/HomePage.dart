@@ -46,17 +46,6 @@ class _HomePageState extends State<HomePage> {
             iconTheme: new IconThemeData(color: Colors.black),
             elevation: 7,
             title: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: (MediaQuery.of(context).size.width / 4) - 28),
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    'lib/assets/logo.png',
-                    height: 45.0,
-                    width: 45.0,
-                  ),
-                  Container(
                     padding: EdgeInsets.all(0.0),
                     child: Text(
                       "Sharecipe",
@@ -65,11 +54,8 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
-              ),
             ),
-            centerTitle: false,
+            centerTitle: true,
             backgroundColor: Colors.white,
           ),
           drawer: DrawerPage(),

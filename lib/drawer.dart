@@ -5,6 +5,7 @@ import 'package:sharecipe/Drawer_Pages/userProfile/user_profile_body.dart';
 import 'package:sharecipe/Drawer_Pages/user_recipes/UserListRecipes.dart';
 import 'package:sharecipe/models/user.dart';
 import 'package:sharecipe/services/auth.dart';
+import 'package:sharecipe/Drawer_Pages/user_drafts/drafts.dart';
 
 class DrawerPage extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -37,6 +38,13 @@ class DrawerPage extends StatelessWidget {
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => UserRecipes()));
+            }),
+        ListTile(
+            title: Text("My Drafts",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Drafts()));
             }),
         ListTile(
             title:

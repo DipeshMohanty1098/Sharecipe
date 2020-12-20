@@ -63,6 +63,7 @@ class _UserProfileState extends State<UserProfile> {
         },
         child: Scaffold(
             appBar: AppBar(
+              iconTheme: new IconThemeData(color: Colors.black),
               title: Text(
                 "${user.name}" + "'s" + " Profile",
                 style:

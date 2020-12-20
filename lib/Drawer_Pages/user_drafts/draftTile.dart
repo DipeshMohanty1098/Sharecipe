@@ -1,59 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import 'package:sharecipe/Drawer_Pages/user_recipes/userRecipeTile.dart';
+import 'package:sharecipe/ViewRecipeNew/ViewRecipe.dart';
 import 'package:sharecipe/models/UserData.dart';
 import 'package:sharecipe/models/recipe.dart';
 import 'package:sharecipe/models/users.dart';
+import 'package:sharecipe/screens/ViewRecipe.dart';
 import 'package:sharecipe/services/database.dart';
-import 'package:sharecipe/shared/loading.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/draftTile.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/editDraftForm.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/localDB_helper.dart';
+import 'package:sharecipe/services/localDB_helper.dart';
 import 'package:toast/toast.dart';
 
-class ViewDrafts extends StatefulWidget {
-  ViewDrafts({this.uid});
+class DraftTile extends StatelessWidget {
+  int id;
   String uid;
-  @override
-  _ViewDraftsState createState() => _ViewDraftsState();
-}
-
-class _ViewDraftsState extends State<ViewDrafts> {
-  bool loading = true;
-
-  List<Map<String,dynamic>> drafts = [];
-
-  void getDrafts() async{
-    drafts = await LocalDatabaseService.instance.queryAll();
-    setState(() {
-      drafts = drafts;
-    });
-  }
-
-  @override
-  void initState(){
-    super.initState();
-    getDrafts();
-  }
+  String authorName;
+  int recipeCount;
+  String recipeName;
+  int recipePrepTime;
+  int cookingTime;
+  String ingredients;
+  String quantity;
+  String units;
+  String steps;
+  String private;
+  DraftTile({this.authorName,this.cookingTime,
+  this.ingredients,this.private,this.quantity,
+  this.recipeCount,this.recipeName,this.recipePrepTime,
+  this.steps,this.uid,this.units,this.id});
 
   @override
   Widget build(BuildContext context) {
-    try {
-      drafts.length;
-    } catch (e) {
-      return Loading();
-    }
-    if (drafts.length == 0) {
-      return Center(
-        child: Text("You have no drafts as of now!",
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-      );
-    } else
-      return ListView.builder(
-          itemCount: drafts.length,
-          itemBuilder: (context, index) {
-            return  Container(
+    final user = Provider.of<UserData>(context);
+    return Container(
       margin: EdgeInsets.fromLTRB(0, 8.0, 0, 0),
       padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
       child: Card(
@@ -66,7 +43,7 @@ class _ViewDraftsState extends State<ViewDrafts> {
               ListTile(
                 //leading: Icon(Icons.portrait),
                 title: Text(
-                 drafts[index]["_recipeName"],
+                 recipeName,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text("DRAFT", style: TextStyle(color: Colors.red)),
@@ -109,8 +86,7 @@ class _ViewDraftsState extends State<ViewDrafts> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () async{
-                                  int rows = await LocalDatabaseService.instance.delete1(drafts[index]["_id"]);
-                                  getDrafts();
+                                  int rows = await LocalDatabaseService.instance.delete1(id);
                                   Navigator.of(context).pop();
                                   Toast.show(
                                       "Recipe Succesfully deleted.", context,
@@ -128,51 +104,15 @@ class _ViewDraftsState extends State<ViewDrafts> {
                   },
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              EditDraftForm(authorName: drafts[index]["_authorName"],
-            id : drafts[index]["_id"],
-            uid: drafts[index]["_uid"],
-            recipeCount: drafts[index]["_recipeCount"],
-            recipeName: drafts[index]["_recipeName"],
-            recipePrepTime: drafts[index]["_recipePrepTime"],
-            cookingTime: drafts[index]["_cookingTime"],
-            ingredients: drafts[index]["_ingredients"],
-            quantity: drafts[index]["_quantity"],
-            units: drafts[index]["_units"],
-            steps: drafts[index]["_steps"],
-            private: drafts[index]["_private"])));
+                  //Navigator.push(
+                    //  context,
+                      //MaterialPageRoute(
+                      //    builder: (context) =>
+                         //     TopNav(recipe: userRecipe)));
                 },
               ),
             ]),
           )),
     );
-            /* 
-            DraftTile(authorName: drafts[index]["_authorName"],
-            id : drafts[index]["_id"],
-            uid: drafts[index]["_uid"],
-            recipeCount: drafts[index]["_recipeCount"],
-            recipeName: drafts[index]["_recipeName"],
-            recipePrepTime: drafts[index]["_recipePrepTime"],
-            cookingTime: drafts[index]["_cookingTime"],
-            ingredients: drafts[index]["_ingredients"],
-            quantity: drafts[index]["_quantity"],
-            units: drafts[index]["_units"],
-            steps: drafts[index]["_steps"],
-            private: drafts[index]["_private"])
-            */
-            //ListTile(
-              //title: Text(drafts[index]["_recipeName"]),
-              //trailing: IconButton(icon: Icon(Icons.delete),
-              //onPressed: () async{
-                //int rows = await LocalDatabaseService.instance.delete1(drafts[index]["_id"]);
-                //print(rows);
-                //getDrafts();
-              //}),
-            ;
-          },
-        );
   }
 }

@@ -8,6 +8,7 @@ class ConfirmBody extends StatelessWidget {
     try {
       return Scaffold(
           appBar: AppBar(
+            iconTheme: new IconThemeData(color: Colors.black),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {

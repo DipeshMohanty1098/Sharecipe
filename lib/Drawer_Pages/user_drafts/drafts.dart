@@ -5,7 +5,7 @@ import 'package:sharecipe/models/UserData.dart';
 import 'package:sharecipe/models/recipe.dart';
 import 'package:sharecipe/models/user.dart';
 import 'package:sharecipe/services/database.dart';
-import 'package:sharecipe/testing.dart/SQFLite_localDB/viewDrafts.dart';
+import 'package:sharecipe/Drawer_Pages/user_drafts/viewDrafts.dart';
 
 class Drafts extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _DraftsState extends State<Drafts> {
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
-            //iconTheme: new IconThemeData(color: Colors.black),
+            iconTheme: new IconThemeData(color: Colors.black),
             elevation: 7,
             title: Text(
               "Your Recipes",
